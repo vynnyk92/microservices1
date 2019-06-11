@@ -1,5 +1,7 @@
 ﻿using Nancy;
 using Nancy.ModelBinding;
+using ShoppingCart.EventFeed;
+using ShoppingCart.ShopingCart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace ShoppingCart.Modules
     public class ShopingCartModule : NancyModule
     {
         public ShopingCartModule(
-            IShopingCartStore shoppingCartStore,
+            IShoppingCartStore shoppingCartStore,
             IProductCatalogClient productCatalogClient,
             IEventStore eventStore)
             : base("/shopingcart")
@@ -44,6 +46,8 @@ namespace ShoppingCart.Modules
 
                 shopingCart.RemoveItems(productCatalogIds, eventStore);
                 shoppingCartStore.Save(shopingCart);
+
+                return shopingCart;
             });
         }
     }
