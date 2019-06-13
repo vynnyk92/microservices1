@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Nancy;
+using Nancy.Configuration;
 using Nancy.Owin;
 
 namespace ShoppingCart
@@ -21,10 +23,16 @@ namespace ShoppingCart
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseOwin(buildFunc =>
+            app.UseOwin().UseNancy(opt => opt.Bootstrapper = new TracingBootstrapper());
+        }
+
+
+        public class TracingBootstrapper : Nancy.DefaultNancyBootstrapper
+        {
+            public override void Configure(INancyEnvironment env)
             {
-                buildFunc.UseNancy();
-            });
+                env.Tracing(enabled: true, displayErrorTraces: true);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShoppingCart.Modules
+namespace ShoppingCart.ShopingCart
 {
     public class ShopingCartModule : NancyModule
     {
@@ -17,7 +17,7 @@ namespace ShoppingCart.Modules
             IEventStore eventStore)
             : base("/shopingcart")
         {
-            Get("/userid:int", parameters =>
+            Get("/{userid:int}", parameters =>
             {
                 var userId = (int)parameters.userid;
                 return shoppingCartStore.Get(userId);
