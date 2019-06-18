@@ -28,24 +28,24 @@ namespace ShoppingCart.ShopingCart
                 var productCatalogIds = this.Bind<int[]>();
                 var userId = (int)parameters.userid;
 
-                var shopingCart = shoppingCartStore.Get(userId);
+                var shopingCart = await shoppingCartStore.Get(userId);
                 var shopingCartItems = await productCatalogClient.GetShopingCartItems(productCatalogIds).ConfigureAwait(false);
 
                 shopingCart.AddItems(shopingCartItems, eventStore);
-                shoppingCartStore.Save(shopingCart);
+                await shoppingCartStore.Save(shopingCart);
 
                 return shopingCart;
             });
 
-            Delete("/{userid:int}/items", parameters =>
+            Delete("/{userid:int}/items", async (parameters, _) =>
             {
                 var productCatalogIds = this.Bind<int[]>();
                 var userId = (int)parameters.userid;
 
-                var shopingCart = shoppingCartStore.Get(userId);
+                var shopingCart = await shoppingCartStore.Get(userId);
 
                 shopingCart.RemoveItems(productCatalogIds, eventStore);
-                shoppingCartStore.Save(shopingCart);
+                await shoppingCartStore.Save(shopingCart);
 
                 return shopingCart;
             });

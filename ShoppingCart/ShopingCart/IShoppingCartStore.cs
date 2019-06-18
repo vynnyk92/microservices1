@@ -7,7 +7,7 @@ namespace ShoppingCart.ShopingCart
 {
     public interface IShoppingCartStore
     {
-        ShoppingCart Get(int userId);
-        void Save(ShoppingCart shoppingCart);
+        Task<ShoppingCart> Get(int userId);
+        Task Save(ShoppingCart shoppingCart);
     }
 }

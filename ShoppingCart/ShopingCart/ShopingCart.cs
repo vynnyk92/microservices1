@@ -18,6 +18,12 @@ namespace ShoppingCart.ShopingCart
             this.UserId = userId;
         }
 
+        public ShoppingCart(int userId, IEnumerable<ShoppingCartItem> shoppingCartItems)
+        {
+            this.UserId = userId;
+            shoppingCartItems.ToList().ForEach(item => this.items.Add(item));
+        }
+
         public void AddItems(
           IEnumerable<ShoppingCartItem> shoppingCartItems,
           IEventStore eventStore)
@@ -41,7 +47,9 @@ namespace ShoppingCart.ShopingCart
     {
         public int ProductCatalogueId { get; }
         public string ProductName { get; }
-        public string Desscription { get; }
+        public string ProductDescription { get; }
+        public string Currency { get; set; }
+        public int Amount { get; set; }
         public Money Price { get; }
 
         public ShoppingCartItem(
@@ -52,8 +60,11 @@ namespace ShoppingCart.ShopingCart
         {
             this.ProductCatalogueId = productCatalogueId;
             this.ProductName = productName;
-            this.Desscription = description;
+            this.ProductDescription = description;
             this.Price = price;
+
+            this.Currency = price.Currency;
+            this.Amount = (int)price.Amount;
         }
 
         public override bool Equals(object obj)
